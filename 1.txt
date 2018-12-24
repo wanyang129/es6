@@ -1,0 +1,23 @@
+小程序解密流程
+1.wx.checkSession()检测当前用户登录态是否有效
+1.点击按钮授权用户信息或者手机号时,
+  用户同意授权,获取到解密需要的数据,包括:encryptedData和iv同时检测用户登录态是否有效
+    检测流程:
+      wx.checkSession()检测当前用户登录态是否有效,如果有效并且本地存储的sessionKey存在,进行第2步操作
+      若用户登录态失效,或者sessionKey不存在,则调用登录流程获取sessionKey
+        登录流程:
+          wx.login()获取code
+          将code传给php后台,后台调用https://api.weixin.qq.com/sns/jscode2session接口,
+          获取openid和sessionKey数据,然后把openid和sessionKey返回给小程序
+  如用户拒绝授权,则停止后续操作
+2.将encryptedData、iv以及sessionKey传给php后台,后台根据加密数据进行解密,并将解密结果传给小程序
+  解密流程:
+          ①判断sessionKey长度,如果不是24位,则解密失败,返回非法sessionKey错误码
+          ②对sessionKey进行base64解码
+          ③判断iv长度,如果不是24位,则解密失败,返回非法iv错误码
+          ④对iv进行base64解码
+          ⑤对加密数据进行64解码
+          ⑥根据iv和sessionKey对加密数据采用AES-128-CBC解密算法进行解密,获取明文信息
+          ⑦对明文信息采用json_decode方法转成json对象,如果队形为空,则解密失败,返回buffer非法错误码
+          ⑧如果json对象中的appid和存储的appid不一致,则解密失败,返回buffer非法错误码
+          ⑨返回明文信息json字符串
