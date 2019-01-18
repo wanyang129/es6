@@ -108,3 +108,43 @@ HTML5规范中详细描述了解析算法,算法由两个过程组成--断词和
   有的渲染对象对应一个DOM节点但是在树中不是同样的位置.浮动和固定定位的元素脱离文档流,被放置在树上不同的位置,然后映射到实际的渲染对象上,在它们应该在的位置上有个占位帧.
   
   viewport是初始包含块,在webkit中是renderview对象
+
+  当DOM书被创建的同时,浏览器创建了另一棵树,渲染树.
+  这个树由按显示顺序排列的可见元素组成,是文档的视觉性的表现,这个树的作用是确保按正确顺序绘制内容.
+
+  class RenderObject{
+    virtual void layout();
+    virtual void paint(PaintINfo);
+    virtual void rect repaintRect();
+    Node* node;
+    RenderStyle* style;
+    RenderLayer* containgLayer;
+  }
+
+RenderObject* RenderObject::createObject(Node* node,RenderStyle* style){
+  Document* doc=node->document();
+  RenderArena* arena=doc->renderArena();
+  RenderObject* o=0;
+}
+switch(style->display()){
+  none 不进行渲染
+  case NONE:
+    break;
+  case INLINE:
+    o=new (arena) RenderInline(node);
+    break;
+  case BLOCK:
+    o=new (arena) RenderBlock(node);
+    break;
+  case INLINE_BLOCK:
+    o=new (arena) RenderBlock(node);
+    break;
+  case LIST_ITEM:
+    o=new (arena) RenderListItem(node);
+    break;
+}
+
+渲染对象和DOM元素是相一致的,但是并不是一对一的关系,非可见元素不会被插入到渲染树上,有个例子是"head"元素,还有display为none的元素不会出现在树中(visibility为hidden的元素会出现).
+
+
+为了不为了每个小的改变都做完全的布局,浏览器使用"重写标志位"系统,被改变或者被添加的解析器会把它自身和它的子节点标记成"重写的"--需要布局.
