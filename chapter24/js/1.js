@@ -60,3 +60,107 @@
 //     return atom.value + value;
 //   },
 // };
+
+// 使用扩展运算符拷贝数组
+// const itemsCopy = [...items];
+
+// 使用Array.from方法,将类似数组的对象转为数组.
+// const foo = document.querySelectorAll('.foo');
+// const nodes = Array.from(foo);
+
+// 立即执行函数可以写成箭头函数的形式
+// (() => {
+//   console.log('Welcome to the Internet');
+// })();
+
+// 那些需要使用函数表达式的场合,尽量使用箭头函数代替,因为这样更简洁,而且绑定了this
+// [1, 2, 3].map(x => x * x);
+
+// 箭头函数取代Function.prototype.bind,不应再用self/_this/that绑定this
+// const boundMethod = (...params) => method.apply(this, parms);
+
+// 所有配置项都应该集中在一个对象,放在最后一个参数,布尔值不可以直接作为参数
+// function divide(a, b, { option = false } = {}) { }
+
+/**
+ * 不要在函数体内使用arguments变量,使用rest运算符代替.
+ * 因为rest运算符显示表明你想要获取参数,而且arguments是一个类似数组的对象,
+ * 而rest运算符可以体用一个真正的数组.
+ */
+// function concatenateAll(...args) {
+//   return args.join('');
+// }
+// 使用默认值语法设置函数参数的默认值
+// function handleThings(opts = {}) { }
+
+// let map = new Map(arr);
+
+// for (let key of map.keys()) {
+//   console.log(key);
+// }
+
+// for (let value of map.values()) {
+//   console.log(value);
+// }
+// for (let item of map.entries()) {
+//   console.log(item[0], item[1]);
+// }
+
+// 总是用Class,取代需要prototype的操作.因为Class的写法更简洁,更易于理解.
+// class Queue {
+//   constructor(contents = []) {
+//     this._queue = [...contents];
+//   }
+//   pop() {
+//     const value = this._queue[0];
+//     this._queue.splice(0, 1);
+//     return value;
+//   }
+// }
+
+// 使用extends实现继承,因为这样更简单,不会有破坏instanceof运算的危险.
+// class PeekableQueue extends Queue {
+//   peek() {
+//     return this._queue[0];
+//   }
+// }
+
+// 使用import取代require
+// import { func1, func2 } from 'moduleA';
+
+// 使用export取代module.exports
+
+// // commonJS写法
+// var React = require('react');
+// var Breadcrumbs = React.createClass({
+//   render() {
+//     return <nav />;
+//   }
+// });
+// module.exports = Breadcrumbs;
+
+// // es6写法
+// import React from 'react';
+// class Breadcrumbs extends React.Components {
+//   render() {
+//     return <nav />;
+//   }
+// };
+// export default Breadcrumbs;
+
+// 不要在模考输入中使用通配符.因为这样可以确保你的模块之中,有一个默认输出.
+// import myObject from './importModule';
+
+// 如果模块默认输出一个函数,函数名的首字母应该小写.
+// function makeStyleGuide() {
+
+// }
+// export default makeStyleGuide;
+
+// 如果模块默认输出一个对象,对象名的首字母应该大写
+const StyleGuide = {
+  es6: {
+
+  }
+};
+export default StyleGuide;
